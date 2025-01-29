@@ -2,7 +2,6 @@ import { Elysia } from "elysia";
 
 const app = new Elysia()
 	.get("/", () => {
-		const data = "data";
 		return "Hello Elysia CI/CD";
 	})
 	.listen(3000);
