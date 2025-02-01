@@ -10,5 +10,20 @@ jobs:
         runs-on: ubuntu-latest
     
         steps:
-        - name: Test Hello World
-          run: echo "Hello World"
+            -   name: Checkout repository
+                uses: actions/checkout@v2
+    
+            -   name: Deploy
+                uses: webfactory/ssh-agent@v0.5.3
+                with:
+                    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+            -   name: SSH to server and pull Docker image and run docker-compose up
+                run: |
+                    ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << EOF
+                        cd app
+                        git pull
+                        docker compose build
+                        docker compose down
+                        docker compose up -d
+                    EOF
